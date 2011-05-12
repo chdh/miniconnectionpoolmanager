@@ -1,0 +1,32 @@
+<!-- Ant build file for MiniConnectionPoolManager -->
+<project name="miniConnectionPoolManager" default="package">
+
+<property environment="env"/>
+
+<target name="clean" description="Deletes the target directory.">
+ <delete dir="target" failonerror="true"/>
+</target>
+
+<target name="compile" description="Compiles the source files.">
+ <mkdir dir="target/classes"/>
+ <javac srcdir="src/main/java" destdir="target/classes"
+    deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source"
+    source="1.6" target="1.6">
+  <compilerarg line="-Xlint -Xlint:-path -Xlint:-options -Xmaxerrs 5 -Xmaxwarns 5"/>
+ </javac>
+</target>
+
+<target name="package" depends="compile" description="Builds the JAR file.">
+ <jar destfile="target/miniconnectionpoolmanager.jar">
+  <fileset dir="target/classes"/>
+ </jar>
+</target>
+
+<target name="javaDoc" description="Generates the API documentation (JavaDoc)">
+ <delete dir="target/javadoc" failonerror="true"/>
+ <mkdir dir="target/javadoc"/>
+ <javadoc sourcepath="src/main/java" destdir="target/javadoc" failonerror="true"
+    link="http://download.oracle.com/javase/6/docs/api/"/>
+</target>
+
+</project>
