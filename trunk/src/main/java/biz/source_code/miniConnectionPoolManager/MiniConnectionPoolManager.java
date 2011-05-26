@@ -33,15 +33,6 @@ import javax.sql.PooledConnection;
 * Home page: <a href="http://www.source-code.biz">www.source-code.biz</a><br>
 * Author: Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland<br>
 * Multi-licensed: EPL/LGPL/MPL.
-* <p>
-* 2007-06-21: Constructor with a timeout parameter added.<br>
-* 2008-05-03: Additional licenses added (EPL/MPL).<br>
-* 2009-06-26: Variable recycledConnections changed from Stack to Queue, so that
-*   the unused connections are reused in a circular manner.
-*   Thanks to Daniel Jurado for the tip.<br>
-* 2009-08-21: ArrayDeque (which was introduced with change 2009-06-26) replaced
-*   by LinkedList, because ArrayDeque is only available since Java 1.6 and we want
-*   to keep MiniConnectionPoolManager compatible with Java 1.5.<br>
 */
 public class MiniConnectionPoolManager {
 

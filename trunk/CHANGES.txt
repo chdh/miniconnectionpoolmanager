@@ -1,0 +1,22 @@
+
+MiniConnectionPoolManager Changes
+---------------------------------
+
+2011-05-26 chdh
+- New directory structure (Maven compatible).
+
+2009-08-21 chdh
+- ArrayDeque (which was introduced with change 2009-06-26) replaced
+  by LinkedList, because ArrayDeque is only available since Java 1.6 and we want
+  to keep MiniConnectionPoolManager compatible with Java 1.5.
+
+2009-06-26 chdh
+- Variable recycledConnections changed from Stack to Queue, so that
+  the unused connections are reused in a circular manner.
+  Thanks to Daniel Jurado for the tip.
+
+2008-05-03 chdh
+- Additional licenses added (EPL/MPL).
+
+2007-06-21 chdh (Christian d'Heureuse)
+- Constructor with a timeout parameter added.
