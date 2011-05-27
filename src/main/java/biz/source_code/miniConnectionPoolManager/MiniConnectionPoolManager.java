@@ -1,4 +1,4 @@
-// Copyright 2007-2009 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
+// Copyright 2007-2011 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
 // www.source-code.biz, www.inventec.ch/chdh
 //
 // This module is multi-licensed and may be used under the terms
