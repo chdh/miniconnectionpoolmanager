@@ -1,5 +1,6 @@
 // DataSource factory for the MiniConnectionPoolManager test programs.
 
+import java.io.PrintWriter;
 import javax.sql.ConnectionPoolDataSource;
 
 public class DataSourceFactory {
@@ -33,7 +34,7 @@ public static ConnectionPoolDataSource createDataSource() throws Exception {
    /*
       com.microsoft.sqlserver.jdbc.SQLServerXADataSource dataSource = new com.microsoft.sqlserver.jdbc.SQLServerXADataSource();
       dataSource.setApplicationName("TestMiniConnectionPoolManager");
-      dataSource.setDatabaseName("Northwind");
+      dataSource.setDatabaseName("Test");
       dataSource.setServerName("localhost");
       dataSource.setUser("sa");
       dataSource.setPassword(System.getProperty("saPassword"));

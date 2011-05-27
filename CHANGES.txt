@@ -4,6 +4,13 @@ MiniConnectionPoolManager Changes
 
 2011-05-26 chdh
 - New directory structure (Maven compatible).
+- The ConnectionEventListener is now kept registered when a PooledConnection
+  is put into the recycledConnections list. This enables us to get
+  PoolConnectionEventListener.connectionErrorOccurred() events for
+  inactive connections.
+- New methods added:
+   getValidConnection()
+   getInactiveConnections()
 
 2009-08-21 chdh
 - ArrayDeque (which was introduced with change 2009-06-26) replaced

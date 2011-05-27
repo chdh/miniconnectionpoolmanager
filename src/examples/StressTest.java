@@ -1,6 +1,5 @@
 // A stress test program for the MiniConnectionPoolManager class.
 
-import java.io.PrintWriter;
 import java.lang.Thread;
 import java.sql.Connection;
 import java.sql.SQLException;
