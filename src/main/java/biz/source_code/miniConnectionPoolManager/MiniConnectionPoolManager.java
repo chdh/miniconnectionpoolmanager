@@ -25,7 +25,7 @@ import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
 
 /**
-* A simple standalone JDBC connection pool manager.
+* A lightweight standalone JDBC connection pool manager.
 *
 * <p>The public methods of this class are thread-safe.
 *
