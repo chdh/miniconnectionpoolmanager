@@ -1,6 +1,5 @@
 // A simple speed test for the MiniConnectionPoolManager class.
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import javax.sql.ConnectionPoolDataSource;
 import biz.source_code.miniConnectionPoolManager.MiniConnectionPoolManager;

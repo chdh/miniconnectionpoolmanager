@@ -36,11 +36,13 @@
 <target name="compileExamples" depends="package, getExampleDependencies" description="Compiles the example source files.">
  <mkdir dir="target/example-classes"/>
  <javac srcdir="src/examples" destdir="target/example-classes"
-    deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source">
+    deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source"
+    source="1.6" target="1.6">
   <compilerarg line="-Xlint -Xlint:-path -Xlint:-options -Xmaxerrs 5 -Xmaxwarns 5"/>
   <classpath>
    <pathelement location="target/miniconnectionpoolmanager.jar"/>
    <pathelement location="target/h2.jar"/>
+   <!-- <pathelement location="target/sqljdbc4.jar"/> -->
   </classpath>
  </javac>
 </target>
@@ -81,6 +83,37 @@
 </target>
 <target name="setH2JarFileExists">
  <available property="h2JarFileExists" file="target/h2.jar"/>
+</target>
+
+<!-- Website update =========================================================-->
+
+<target name="buildDistribZip" description="Builds the distribution ZIP file.">
+ <antcall target="clean"/>
+ <antcall target="package"/>
+ <antcall target="javaDoc"/>
+ <zip destfile="target/miniConnectionPoolManager.zip">
+  <zipfileset dir="."
+   includes="build.xml, CHANGES.txt, README.txt, MiniConnectionPoolManager.html, src/, target/miniconnectionpoolmanager.jar, target/javadoc/"/>
+ </zip>
+</target>
+
+<target name="updateWebsite">
+ <fail unless="env.miniConnectionPoolManagerWebsiteDir" message="Undefined website directory."/>
+ <property name="websiteDir" location="${env.miniConnectionPoolManagerWebsiteDir}"/>
+ <antcall target="buildDistribZip"/>
+ <copy todir="${websiteDir}" overwrite="true">
+  <fileset dir="src/main" includes="**/*.java"/>
+  <chainedmapper>
+   <flattenmapper/>
+   <mapper>
+    <globmapper from="*.java" to="*.java.txt"/>
+    <identitymapper/>
+   </mapper>
+  </chainedmapper>
+ </copy>
+ <copy todir="${websiteDir}" overwrite="true">
+  <fileset dir="target" includes="miniConnectionPoolManager.zip, javadoc/"/>
+ </copy>
 </target>
 
 </project>

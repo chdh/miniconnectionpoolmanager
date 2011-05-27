@@ -1,6 +1,5 @@
 // A simple test program for the MiniConnectionPoolManager class.
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import javax.sql.ConnectionPoolDataSource;
 import biz.source_code.miniConnectionPoolManager.MiniConnectionPoolManager;
@@ -15,6 +14,7 @@ public static void main (String[] args) throws Exception {
    poolMgr = new MiniConnectionPoolManager(dataSource, 10);
    Connection conn = poolMgr.getConnection();
    conn.close();
-   System.out.println("OK"); }
+   poolMgr.dispose();
+   System.out.println("Program completed."); }
 
 } // end class SimpleTest

@@ -2,7 +2,7 @@
 MiniConnectionPoolManager
 =========================
 
-MiniConnectionPoolManager is a simple standalone JDBC connection
+MiniConnectionPoolManager is a lightweight standalone Java JDBC connection
 pool manager.
 
-Project home page: http://www.source-code.biz/snippets/java/8.htm
+Project home page: http://www.source-code.biz/miniconnectionpoolmanager
