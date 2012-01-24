@@ -9,7 +9,7 @@
  <delete dir="target" failonerror="true"/>
 </target>
 
-<target name="compile" description="Compiles the source files.">
+<target name="compile" description="Compiles the main source files.">
  <mkdir dir="target/classes"/>
  <javac srcdir="src/main/java" destdir="target/classes"
     deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source"
