@@ -2,6 +2,13 @@
 MiniConnectionPoolManager Changes
 ---------------------------------
 
+2012-01-24 chdh
+- Error corrected which can occur when using the MySQL JDBC driver.
+  The JDBC driver may call ConnectionEventListener.connectionErrorOccurred()
+  from within PooledConnection.getConnection().
+  This led to an AssertionError in disposeConnection().
+  Thanks to Gilles Duboscq for reporting and analyzing this error.
+
 2011-05-26 chdh
 - New directory structure (Maven compatible).
 - The ConnectionEventListener is now kept registered when a PooledConnection

@@ -40,11 +40,15 @@ private int                            maxConnections;
 private long                           timeoutMs;
 private PrintWriter                    logWriter;
 private Semaphore                      semaphore;
-private LinkedList<PooledConnection>   recycledConnections;
-private int                            activeConnections;
 private PoolConnectionEventListener    poolConnectionEventListener;
-private boolean                        isDisposed;
-private boolean                        doPurgeConnection;
+
+// The following variables must only be accessed within synchronized blocks.
+// @GuardedBy("this") could by used in the future.
+private LinkedList<PooledConnection>   recycledConnections;          // list of inactive PooledConnections
+private int                            activeConnections;            // number of active (open) connections of this pool
+private boolean                        isDisposed;                   // true if this connection pool has been disposed
+private boolean                        doPurgeConnection;            // flag to purge the connection currently beeing closed instead of recycling it
+private PooledConnection               connectionInTransition;       // a PooledConnection which is currently within a PooledConnection.getConnection() call, or null
 
 /**
 * Thrown in {@link #getConnection()} or {@link #getValidConnection()} when no free connection becomes
@@ -145,15 +149,23 @@ private Connection getConnection2 (long timeoutMs) throws SQLException {
          semaphore.release(); }}}
 
 private synchronized Connection getConnection3() throws SQLException {
-   if (isDisposed) {
-      throw new IllegalStateException("Connection pool has been disposed."); }  // test again with lock
+   if (isDisposed) {                                       // test again within synchronized lock
+      throw new IllegalStateException("Connection pool has been disposed."); }
    PooledConnection pconn;
    if (!recycledConnections.isEmpty()) {
       pconn = recycledConnections.remove(); }
     else {
       pconn = dataSource.getPooledConnection();
       pconn.addConnectionEventListener(poolConnectionEventListener); }
-   Connection conn = pconn.getConnection();
+   Connection conn;
+   try {
+      // The JDBC driver may call ConnectionEventListener.connectionErrorOccurred()
+      // from within PooledConnection.getConnection(). To detect this within
+      // disposeConnection(), we temporarily set connectionInTransition.
+      connectionInTransition = pconn;
+      conn = pconn.getConnection(); }
+    finally {
+      connectionInTransition = null; }
    activeConnections++;
    assertInnerState();
    return conn; }
@@ -170,7 +182,6 @@ private synchronized Connection getConnection3() throws SQLException {
 *
 * <p>This method is slower than {@link #getConnection()} because the JDBC
 * driver has to send an extra command to the database server to test the connection.
-*
 *
 * <p>This method requires Java 1.6 or newer.
 *
@@ -244,8 +255,9 @@ private synchronized void recycleConnection (PooledConnection pconn) {
 
 private synchronized void disposeConnection (PooledConnection pconn) {
    pconn.removeConnectionEventListener(poolConnectionEventListener);
-   if (!recycledConnections.remove(pconn)) {
-      // If the PooledConnection is not in the recycledConnections list,
+   if (!recycledConnections.remove(pconn) && pconn != connectionInTransition) {
+      // If the PooledConnection is not in the recycledConnections list
+      // and is not currently within a PooledConnection.getConnection() call,
       // we assume that the connection was active.
       if (activeConnections <= 0) {
          throw new AssertionError(); }
@@ -269,7 +281,7 @@ private void log (String msg) {
          logWriter.println(s); }}
     catch (Exception e) {}}
 
-private void assertInnerState() {
+private synchronized void assertInnerState() {
    if (activeConnections < 0) {
       throw new AssertionError(); }
    if (activeConnections + recycledConnections.size() > maxConnections) {
