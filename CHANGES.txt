@@ -2,6 +2,11 @@
 MiniConnectionPoolManager Changes
 ---------------------------------
 
+2016-10-09 chdh
+- Extended recycleConnection() to detect and ignore multiple calls of
+  ConnectionEventListener.connectionClosed(), caused by faulty JDBC
+  drivers (Xerial-sqlite-jdbc).
+
 2012-01-24 chdh
 - Error corrected which can occur when using the MySQL JDBC driver.
   The JDBC driver may call ConnectionEventListener.connectionErrorOccurred()

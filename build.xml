@@ -28,7 +28,7 @@
  <delete dir="target/javadoc" failonerror="true"/>
  <mkdir dir="target/javadoc"/>
  <javadoc sourcepath="src/main/java" destdir="target/javadoc" failonerror="true"
-    link="http://download.oracle.com/javase/6/docs/api/"/>
+    link="https://docs.oracle.com/javase/7/docs/api/"/>
 </target>
 
 <!-- Examples ===============================================================-->
@@ -111,6 +111,7 @@
    </mapper>
   </chainedmapper>
  </copy>
+ <delete dir="${websiteDir}/javadoc" failonerror="true"/>
  <copy todir="${websiteDir}" overwrite="true">
   <fileset dir="target" includes="miniConnectionPoolManager.zip, javadoc/"/>
  </copy>
