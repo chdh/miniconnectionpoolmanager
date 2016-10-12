@@ -43,6 +43,7 @@
    <pathelement location="target/miniconnectionpoolmanager.jar"/>
    <pathelement location="target/h2.jar"/>
    <!-- <pathelement location="target/sqljdbc4.jar"/> -->
+   <!-- <pathelement location="target/sqlite-jdbc-3.14.2.1.jar"/> -->
   </classpath>
  </javac>
 </target>
