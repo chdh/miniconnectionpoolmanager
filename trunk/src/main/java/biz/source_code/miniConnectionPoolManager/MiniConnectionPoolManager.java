@@ -246,10 +246,9 @@ private synchronized void recycleConnection (PooledConnection pconn) {
    if (isDisposed || doPurgeConnection) {
       disposeConnection(pconn);
       return; }
-   if (recycledConnections.contains(pconn)) {
-      // If the PooledConnection is already within the recycledConnections list,
-      // we assume that a faulty JDBC driver has called ConnectionEventListener.connectionClosed()
-      // more than once and ignore the call.
+   if (pconn == connectionInTransition) {
+      // This happens when a faulty JDBC driver calls ConnectionEventListener.connectionClosed()
+      // a second time within PooledConnection.getConnection().
       return; }
    if (activeConnections <= 0) {
       throw new AssertionError(); }

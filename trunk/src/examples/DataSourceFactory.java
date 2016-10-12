@@ -52,6 +52,15 @@ public static ConnectionPoolDataSource createDataSource() throws Exception {
       dataSource.setPassword("x");
    */
 
+   // Version for SQLite JDBC Driver (Xerial-sqlite-jdbc):
+   /*
+      org.sqlite.javax.SQLiteConnectionPoolDataSource dataSource = new org.sqlite.javax.SQLiteConnectionPoolDataSource();
+      // dataSource.setUrl("jdbc:sqlite::memory:");           // in-memory database
+      dataSource.setUrl("jdbc:sqlite:c:/temp/tempMiniConnectionPoolManagerTest.db");
+      dataSource.setJournalMode("WAL");
+      dataSource.getConfig().setBusyTimeout("10000");         // this is necessary for StressTest.java
+   */
+
    return dataSource; }
 
 } // end class DataSourceFactory
