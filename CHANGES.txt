@@ -2,6 +2,16 @@
 MiniConnectionPoolManager Changes
 ---------------------------------
 
+2022-01-18 chdh
+- getValidConnection() improved.
+  - When a timeout occurs and an SQLException was received from the JDBC
+    driver, it is now passed as a nested exception in
+    TimeoutException.getCause().
+    Thanks to Amram Vaknin for the suggestion.
+  - System.nanoTime() is now used instead of System.currentTimeMillis(),
+    because currentTimeMillis() may have leaps when the system time is
+    adjusted.
+
 2016-10-13 chdh
 - Extended recycleConnection() to ignore duplicate call to
   ConnectionEventListener.connectionClosed(), caused by faulty JDBC

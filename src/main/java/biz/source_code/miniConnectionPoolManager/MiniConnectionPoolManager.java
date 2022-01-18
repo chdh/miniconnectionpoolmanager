@@ -58,8 +58,8 @@ public static class TimeoutException extends RuntimeException {
    private static final long serialVersionUID = 1;
    public TimeoutException () {
       super("Timeout while waiting for a free database connection."); }
-   public TimeoutException (String msg) {
-      super(msg); }}
+   public TimeoutException (String msg, Exception cause) {
+      super(msg, cause); }}
 
 /**
 * Constructs a MiniConnectionPoolManager object with a timeout of 60 seconds.
@@ -189,33 +189,30 @@ private synchronized Connection getConnection3() throws SQLException {
 *    when no valid connection becomes available within <code>timeout</code> seconds.
 */
 public Connection getValidConnection() {
-   long time = System.currentTimeMillis();
-   long timeoutTime = time + timeoutMs;
+   long timeoutTime = System.nanoTime() + timeoutMs * (long)1E6;
    int triesWithoutDelay = getInactiveConnections() + 1;
    while (true) {
-      Connection conn = getValidConnection2(time, timeoutTime);
-      if (conn != null) {
-         return conn; }
+      Exception cause = null;
+      try {
+         Connection conn = getValidConnection2(timeoutTime);
+         if (conn != null) {
+            return conn; }}
+       catch (Exception e) {
+         cause = e; }
+      if (System.nanoTime() >= timeoutTime) {
+         throw new TimeoutException("Timeout while waiting for a valid database connection.", cause); }
       triesWithoutDelay--;
       if (triesWithoutDelay <= 0) {
          triesWithoutDelay = 0;
          try {
             Thread.sleep(250); }
           catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while waiting for a valid database connection.", e); }}
-      time = System.currentTimeMillis();
-      if (time >= timeoutTime) {
-         throw new TimeoutException("Timeout while waiting for a valid database connection."); }}}
+            throw new RuntimeException("Interrupted while waiting for a valid database connection.", cause); }}}}
 
-private Connection getValidConnection2 (long time, long timeoutTime) {
-   long rtime = Math.max(1, timeoutTime - time);
-   Connection conn;
-   try {
-      conn = getConnection2(rtime); }
-    catch (SQLException e) {
-      return null; }
-   rtime = timeoutTime - System.currentTimeMillis();
-   int rtimeSecs = Math.max(1, (int)((rtime+999)/1000));
+private Connection getValidConnection2 (long timeoutTime) throws SQLException {
+   long rtimeMs = Math.max(1, (timeoutTime - System.nanoTime()) / (int)1E6);
+   Connection conn = getConnection2(rtimeMs);
+   int rtimeSecs = (int)Math.min(3600, Math.max(1, ((timeoutTime - System.nanoTime() + (long)1E9 - 1) / (long)1E9)));
    try {
       if (conn.isValid(rtimeSecs)) {
          return conn; }}

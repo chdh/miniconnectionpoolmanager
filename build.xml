@@ -13,7 +13,7 @@
  <mkdir dir="target/classes"/>
  <javac srcdir="src/main/java" destdir="target/classes"
     deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source"
-    source="1.6" target="1.6">
+    source="8" target="8">
   <compilerarg line="-Xlint -Xlint:-path -Xlint:-options -Xmaxerrs 5 -Xmaxwarns 5"/>
  </javac>
 </target>
@@ -37,7 +37,7 @@
  <mkdir dir="target/example-classes"/>
  <javac srcdir="src/examples" destdir="target/example-classes"
     deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source"
-    source="1.6" target="1.6">
+    source="8" target="8">
   <compilerarg line="-Xlint -Xlint:-path -Xlint:-options -Xmaxerrs 5 -Xmaxwarns 5"/>
   <classpath>
    <pathelement location="target/miniconnectionpoolmanager.jar"/>
@@ -70,8 +70,8 @@
 
 <!-- External dependencies for the example programs =========================-->
 
-<property name="extH2JarFileVersion"    value="1.2.147"/>
-<property name="extH2JarFileUrl"        value="http://repo1.maven.org/maven2/com/h2database/h2/${extH2JarFileVersion}/h2-${extH2JarFileVersion}.jar"/>
+<property name="extH2JarFileVersion"    value="2.1.210"/>
+<property name="extH2JarFileUrl"        value="https://repo1.maven.org/maven2/com/h2database/h2/${extH2JarFileVersion}/h2-${extH2JarFileVersion}.jar"/>
 
 <target name="getExampleDependencies" description="Retrieves the required library JAR files for the xamples and stores them in the target directory"
    depends="getH2JarFile">
